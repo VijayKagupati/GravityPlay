@@ -11,36 +11,38 @@ public class PlayerController : MonoBehaviour
     
     [Header("References")]
     public Transform modelTransform;
-    private Rigidbody rb;
-    private Animator animator;
-    private bool isGrounded;
-    private Vector3 moveDirection;
-    private float timeSinceLastGrounded = 0f;
     
-    // Gravity variables
-    private Vector3 gravityDirection = Vector3.down;
-    private Vector3 selectedGravityDirection = Vector3.down;
+    private Rigidbody _rb;
+    private Animator _animator;
+    private bool _isGrounded;
+    private Vector3 _moveDirection;
+    private float _timeSinceLastGrounded = 0f;
     
-    private const string ANIM_PARAM_SPEED = "Speed";
-    private const string ANIM_PARAM_GROUNDED = "Grounded";
-    private const string ANIM_TRIGGER_JUMP = "Jump";
+    // Gravity control
+    private Vector3 _gravityDirection = Vector3.down;
+    private Vector3 _selectedGravityDirection = Vector3.down;
+    
+    // Animation parameter names
+    private string _animParamSpeed = "Speed";
+    private string _animParamGrounded = "Grounded";
+    private string _animTriggerJump = "Jump";
     
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        animator = GetComponentInChildren<Animator>();
+        _rb = GetComponent<Rigidbody>();
+        _animator = GetComponentInChildren<Animator>();
         
         if (modelTransform == null && transform.childCount > 0)
             modelTransform = transform.GetChild(0);
             
-        if (animator == null)
+        if (_animator == null)
         {
             Debug.LogWarning("No Animator component found on player or its children. Animations won't work.");
         }
         
-        // Disable Unity's default gravity so we can control it
+        // Custom gravity implementation
         Physics.gravity = Vector3.zero;
-        rb.useGravity = false;
+        _rb.useGravity = false;
     }
     
     private void Update()
@@ -49,7 +51,7 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         HandleGravityInput();
         
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
         {
             Jump();
         }
@@ -59,11 +61,10 @@ public class PlayerController : MonoBehaviour
     
     private void UpdateAnimator()
     {
-        if (animator != null)
+        if (_animator != null)
         {
-            animator.SetFloat(ANIM_PARAM_SPEED, moveDirection.magnitude);
-            
-            animator.SetBool(ANIM_PARAM_GROUNDED, isGrounded);
+            _animator.SetFloat(_animParamSpeed, _moveDirection.magnitude);
+            _animator.SetBool(_animParamGrounded, _isGrounded);
         }
     }
     
@@ -80,13 +81,13 @@ public class PlayerController : MonoBehaviour
         
         if (Physics.Raycast(rayStart, -transform.up, out hit, groundCheckDistance + 0.1f, groundLayers))
         {
-            isGrounded = true;
-            timeSinceLastGrounded = 0;
+            _isGrounded = true;
+            _timeSinceLastGrounded = 0;
         }
         else
         {
-            isGrounded = false;
-            timeSinceLastGrounded += Time.deltaTime;
+            _isGrounded = false;
+            _timeSinceLastGrounded += Time.deltaTime;
         }
     }
     
@@ -95,96 +96,95 @@ public class PlayerController : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");  
         
+        // Get camera directions adjusted for gravity orientation
         Vector3 cameraForward = Camera.main.transform.forward;
         Vector3 cameraRight = Camera.main.transform.right;
         
-        // Project camera directions onto the plane perpendicular to gravity
-        cameraForward = Vector3.ProjectOnPlane(cameraForward, -gravityDirection).normalized;
-        cameraRight = Vector3.ProjectOnPlane(cameraRight, -gravityDirection).normalized;
+        cameraForward = Vector3.ProjectOnPlane(cameraForward, -_gravityDirection).normalized;
+        cameraRight = Vector3.ProjectOnPlane(cameraRight, -_gravityDirection).normalized;
         
-        moveDirection = cameraForward * vertical + cameraRight * horizontal;
+        _moveDirection = cameraForward * vertical + cameraRight * horizontal;
         
-        if (moveDirection.magnitude > 1f)
+        if (_moveDirection.magnitude > 1f)
         {
-            moveDirection.Normalize();
+            _moveDirection.Normalize();
         }
     }
     
     private void HandleGravityInput()
     {
-        // Local directional vectors relative to the player's current orientation
+        // Get local orientation vectors
         Vector3 localForward = transform.forward;
         Vector3 localRight = transform.right;
         Vector3 localUp = transform.up;
         
-        // Select gravity direction with arrow keys based on character's local orientation
+        // Select gravity direction based on arrow keys
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            selectedGravityDirection = -localForward; // Down in forward direction
+            _selectedGravityDirection = localForward;
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            selectedGravityDirection = localForward; // Down in backward direction
+            _selectedGravityDirection = -localForward;
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            selectedGravityDirection = localRight; // Down in right direction
+            _selectedGravityDirection = -localRight;
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            selectedGravityDirection = -localRight; // Down in left direction
+            _selectedGravityDirection = localRight;
         }
         else if (Input.GetKeyDown(KeyCode.PageUp))
         {
-            selectedGravityDirection = -localUp; // Down in up direction
+            _selectedGravityDirection = -localUp;
         }
         else if (Input.GetKeyDown(KeyCode.PageDown))
         {
-            selectedGravityDirection = localUp; // Down in down direction
+            _selectedGravityDirection = localUp;
         }
         
-        // Apply the new gravity direction ONLY when Enter is pressed
+        // Apply gravity change when Enter is pressed
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            gravityDirection = selectedGravityDirection.normalized;
-            ChangeOrientation(-gravityDirection);
+            _gravityDirection = _selectedGravityDirection.normalized;
+            ChangeOrientation(-_gravityDirection);
             
             // Notify camera about gravity change
             CameraController cameraController = Camera.main.GetComponent<CameraController>();
             if (cameraController != null)
             {
-                cameraController.OnGravityDirectionChanged(-gravityDirection);
+                cameraController.OnGravityDirectionChanged(-_gravityDirection);
             }
         }
     }
     
     private void ApplyGravity()
     {
-        if (!isGrounded)
+        if (!_isGrounded)
         {
-            // Apply gravity force
-            rb.AddForce(gravityDirection * 9.81f, ForceMode.Acceleration);
+            // Standard gravity acceleration
+            _rb.AddForce(_gravityDirection * 9.81f, ForceMode.Acceleration);
         }
     }
     
     private void Move()
     {
-        Vector3 targetVelocity = moveDirection * moveSpeed;
+        Vector3 targetVelocity = _moveDirection * moveSpeed;
         
-        // Instead of just y, preserve velocity in the direction of gravity
-        float gravityVelocity = Vector3.Dot(rb.velocity, gravityDirection);
-        Vector3 gravityComponent = gravityDirection * gravityVelocity;
+        // Preserve velocity in gravity direction
+        float gravityVelocity = Vector3.Dot(_rb.velocity, _gravityDirection);
+        Vector3 gravityComponent = _gravityDirection * gravityVelocity;
         
-        // Set velocity with preserved gravity component
-        rb.velocity = targetVelocity + gravityComponent;
+        _rb.velocity = targetVelocity + gravityComponent;
         
-        if (moveDirection.magnitude > 0.1f && modelTransform != null)
+        // Rotate model to face movement direction
+        if (_moveDirection.magnitude > 0.1f && modelTransform != null)
         {
-            // Create a rotation that accounts for the current up direction
-            Vector3 forward = Vector3.ProjectOnPlane(moveDirection, -gravityDirection).normalized;
+            Vector3 forward = Vector3.ProjectOnPlane(_moveDirection, -_gravityDirection).normalized;
             if (forward.magnitude > 0.1f)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(forward, -gravityDirection);
+                Quaternion targetRotation = Quaternion.LookRotation(forward, -_gravityDirection);
                 modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
         }
@@ -192,11 +192,11 @@ public class PlayerController : MonoBehaviour
     
     private void Jump()
     {
-        rb.AddForce(-gravityDirection * jumpForce, ForceMode.Impulse);
+        _rb.AddForce(-_gravityDirection * jumpForce, ForceMode.Impulse);
         
-        if (animator != null)
+        if (_animator != null)
         {
-            animator.SetTrigger(ANIM_TRIGGER_JUMP);
+            _animator.SetTrigger(_animTriggerJump);
         }
     }
     
