@@ -93,8 +93,14 @@ public class PlayerController : MonoBehaviour
     
     private void HandleMovementInput()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");  
+        // Using GetKey instead of input axes to restrict movement to WASD only
+        float horizontal = 0f;
+        float vertical = 0f;
+        
+        if (Input.GetKey(KeyCode.A)) horizontal -= 1f;
+        if (Input.GetKey(KeyCode.D)) horizontal += 1f;
+        if (Input.GetKey(KeyCode.W)) vertical += 1f;
+        if (Input.GetKey(KeyCode.S)) vertical -= 1f;
         
         // Get camera directions adjusted for gravity orientation
         Vector3 cameraForward = Camera.main.transform.forward;
@@ -149,13 +155,6 @@ public class PlayerController : MonoBehaviour
         {
             _gravityDirection = _selectedGravityDirection.normalized;
             ChangeOrientation(-_gravityDirection);
-            
-            // Notify camera about gravity change
-            CameraController cameraController = Camera.main.GetComponent<CameraController>();
-            if (cameraController != null)
-            {
-                cameraController.OnGravityDirectionChanged(-_gravityDirection);
-            }
         }
     }
     
