@@ -10,8 +10,12 @@ public class GameManager : MonoBehaviour
     public GameObject winPanel;
     public GameObject gameOverPanel;
     public TextMeshProUGUI cubeCountText;
+    public TextMeshProUGUI timerText;  // Reference to the timer UI text
     public AudioClip winSound;
     public AudioClip loseSound;
+    
+    [Header("Game Settings")]
+    public float gameTimeLimit = 120f;  // 2 minutes in seconds
     
     private int _totalCubes = 0;
     private int _collectedCubes = 0;
@@ -19,6 +23,7 @@ public class GameManager : MonoBehaviour
     
     // Track if gameplay is active
     private bool _isGameplayActive = true;
+    private float _remainingTime;
     
     // Singleton instance for easy access
     public static GameManager Instance { get; private set; }
@@ -48,6 +53,9 @@ public class GameManager : MonoBehaviour
             _audioSource = gameObject.AddComponent<AudioSource>();
         }
         
+        // Initialize timer
+        _remainingTime = gameTimeLimit;
+        
         // Dynamically count all collectible cubes in the scene
         CollectibleCube[] cubes = FindObjectsOfType<CollectibleCube>();
         _totalCubes = cubes.Length;
@@ -64,6 +72,37 @@ public class GameManager : MonoBehaviour
         }
         
         UpdateCubeCounter();
+        UpdateTimerDisplay();
+    }
+    
+    private void Update()
+    {
+        if (_isGameplayActive)
+        {
+            // Update timer
+            _remainingTime -= Time.deltaTime;
+            
+            // Update timer display
+            UpdateTimerDisplay();
+            
+            // Check if time is up
+            if (_remainingTime <= 0)
+            {
+                _remainingTime = 0;
+                UpdateTimerDisplay();
+                GameOver("Time's up!");
+            }
+        }
+    }
+    
+    private void UpdateTimerDisplay()
+    {
+        if (timerText != null)
+        {
+            int minutes = Mathf.FloorToInt(_remainingTime / 60);
+            int seconds = Mathf.FloorToInt(_remainingTime % 60);
+            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
     }
     
     public void CubeCollected()
@@ -112,9 +151,12 @@ public class GameManager : MonoBehaviour
     // Simple game over method
     public void GameOver(string message)
     {
+        // Only process game over once
+        if (!_isGameplayActive) return;
+        
         // Disable gameplay
         _isGameplayActive = false;
-        if (_audioSource != null && winSound != null)
+        if (_audioSource != null && loseSound != null)
         {
             _audioSource.PlayOneShot(loseSound);
         }
