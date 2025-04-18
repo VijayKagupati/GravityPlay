@@ -10,7 +10,7 @@ public class CameraController : MonoBehaviour
     public float positionSmoothTime = 0.3f;
     public float rotationSmoothTime = 0.5f;
     
-    // Smoothing variables
+    // Variables used for smoothing camera movement
     private Vector3 _positionVelocity = Vector3.zero;
     private Vector3 _smoothedPlayerForward;
     private Vector3 _smoothedPlayerUp;
@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
             }
             else
             {
-                Debug.LogError("CameraController: No target assigned and no player found!");
+                // Debug.LogError("CameraController: No target assigned and no player found!");
                 return;
             }
         }
@@ -43,7 +43,7 @@ public class CameraController : MonoBehaviour
         if (target == null)
             return;
         
-        // Smooth player orientation changes
+        // Smooth player orientation changes to prevent jerky camera movement
         _smoothedPlayerForward = Vector3.SmoothDamp(_smoothedPlayerForward, target.forward, 
                                                    ref _forwardVelocity, _orientationSmoothTime);
         _smoothedPlayerUp = Vector3.SmoothDamp(_smoothedPlayerUp, target.up, 

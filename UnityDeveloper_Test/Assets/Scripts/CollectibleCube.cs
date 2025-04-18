@@ -16,19 +16,19 @@ public class CollectibleCube : MonoBehaviour
     
     private void Collect()
     {
-        // Play collection sound
+        // Play collection sound if available
         if (audioSource != null && collectSound != null)
         {
             audioSource.PlayOneShot(collectSound);
         }
         
-        // Notify GameManager that a cube was collected
+        // Notify GameManager of collection
         if (GameManager.Instance != null)
         {
             GameManager.Instance.CubeCollected();
         }
         
-        // Hide the cube
+        // Hide the cube but keep the GameObject until sound finishes
         GetComponent<Renderer>().enabled = false;
         GetComponent<Collider>().enabled = false;
         

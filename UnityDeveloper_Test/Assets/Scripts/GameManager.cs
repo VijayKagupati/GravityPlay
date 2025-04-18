@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public GameObject winPanel;
     public GameObject gameOverPanel;
     public TextMeshProUGUI cubeCountText;
-    public TextMeshProUGUI timerText;  // Reference to the timer UI text
+    public TextMeshProUGUI timerText;
     public AudioClip winSound;
     public AudioClip loseSound;
     
@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     
     private void Awake()
     {
-        // Set up singleton
+        // Set up singleton pattern
         if (Instance == null)
         {
             Instance = this;
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
         CollectibleCube[] cubes = FindObjectsOfType<CollectibleCube>();
         _totalCubes = cubes.Length;
         
-        // Initially hide UI panels if assigned
+        // Initially hide UI panels
         if (winPanel != null)
         {
             winPanel.SetActive(false);
@@ -82,7 +82,6 @@ public class GameManager : MonoBehaviour
             // Update timer
             _remainingTime -= Time.deltaTime;
             
-            // Update timer display
             UpdateTimerDisplay();
             
             // Check if time is up
@@ -145,10 +144,9 @@ public class GameManager : MonoBehaviour
             winPanel.SetActive(true);
         }
         
-        Debug.Log("Congratulations! All cubes collected!");
+        // Debug.Log("Congratulations! All cubes collected!");
     }
     
-    // Simple game over method
     public void GameOver(string message)
     {
         // Only process game over once
@@ -164,7 +162,7 @@ public class GameManager : MonoBehaviour
         // Show game over panel after a short delay
         StartCoroutine(ShowGameOverPanel());
         
-        Debug.Log("Game Over: " + message);
+        // Debug.Log("Game Over: " + message);
     }
     
     private IEnumerator ShowGameOverPanel()
@@ -188,8 +186,7 @@ public class GameManager : MonoBehaviour
 
     public void QuitGame()
     {
-        // Log a message to the console (useful for testing in the Editor)
-        Debug.Log("Quitting game...");
+        // Debug.Log("Quitting game...");
     
 #if UNITY_EDITOR
         // If in the Unity Editor

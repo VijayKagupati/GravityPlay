@@ -20,10 +20,11 @@ public class HologramController : MonoBehaviour
         
         if (hologramPrefab == null)
         {
-            Debug.LogError("No hologram prefab assigned. Please assign a prefab that looks like the player.");
+            // Debug.LogError("No hologram prefab assigned. Please assign a prefab that looks like the player.");
             return;
         }
         
+        // Create and initialize the hologram instance
         _hologramInstance = Instantiate(hologramPrefab);
         _hologramInstance.name = "GravityPreviewHologram";
         
@@ -44,7 +45,7 @@ public class HologramController : MonoBehaviour
         Vector3 localRight = player.right;
         Vector3 localUp = player.up;
         
-        // Check for direction keys
+        // Check for direction keys to show preview
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             previewDirection = localForward;
@@ -86,7 +87,7 @@ public class HologramController : MonoBehaviour
             UpdateHologramPosition();
         }
         
-        // Hide preview when Enter is pressed
+        // Hide preview when Enter is pressed (gravity direction is confirmed)
         if ((Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) && _showingPreview)
         {
             HidePreview();
@@ -103,13 +104,15 @@ public class HologramController : MonoBehaviour
     
     private void UpdateHologramPosition()
     {
+        // Position the hologram at a distance in the preview direction
         Vector3 previewPosition = player.position + _currentPreviewDirection * previewDistance;
         
-        // Calculate new orientation
+        // Calculate new orientation based on the gravity direction
         Vector3 newUp = -_currentPreviewDirection;
         Vector3 newForward = Vector3.ProjectOnPlane(player.forward, newUp).normalized;
         if (newForward.magnitude < 0.001f)
         {
+            // Fallback if forward is too close to gravity direction
             newForward = Vector3.ProjectOnPlane(Vector3.forward, newUp).normalized;
         }
         
@@ -128,11 +131,11 @@ public class HologramController : MonoBehaviour
     
     private void DisableComponents(GameObject obj)
     {
-        // Make hologram non-physical
+        // Make hologram non-physical by disabling physics components
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null) rb.isKinematic = true;
         
-        // Disable all colliders
+        // Disable all colliders to prevent interaction
         Collider[] colliders = obj.GetComponentsInChildren<Collider>();
         foreach (Collider col in colliders)
         {

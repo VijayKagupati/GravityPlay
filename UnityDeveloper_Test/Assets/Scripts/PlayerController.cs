@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
             
         if (_animator == null)
         {
-            Debug.LogWarning("No Animator component found on player or its children. Animations won't work.");
+            // Debug.LogWarning("No Animator component found on player or its children. Animations won't work.");
         }
         
         // Custom gravity implementation
@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            // If gameplay is not active, set move direction to zero
+            // Prevent movement when gameplay is inactive
             _moveDirection = Vector3.zero;
         }
         
@@ -75,13 +75,11 @@ public class PlayerController : MonoBehaviour
     
     private void CheckFallDuration()
     {
-        // Only check for extended falls if the game is active
+        // Trigger game over if player falls for too long
         if (IsGameplayActive() && !_isGrounded)
         {
-            // Check if player has been falling for too long
             if (_timeSinceLastGrounded > maxFallTime)
             {
-                // Trigger game over
                 if (GameManager.Instance != null)
                 {
                     GameManager.Instance.GameOver("You fell into the void!");
@@ -101,7 +99,6 @@ public class PlayerController : MonoBehaviour
     
     private void FixedUpdate()
     {
-        // Only move and apply gravity if gameplay is active
         if (IsGameplayActive())
         {
             Move();
@@ -109,13 +106,12 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            // If gameplay is not active, stop all movement
+            // Stop all physics movement when gameplay is inactive
             _rb.velocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
         }
     }
     
-    // Helper method to check if gameplay is active
     private bool IsGameplayActive()
     {
         return GameManager.Instance != null && GameManager.Instance.IsGameplayActive;
@@ -140,7 +136,7 @@ public class PlayerController : MonoBehaviour
     
     private void HandleMovementInput()
     {
-        // Using GetKey instead of input axes to restrict movement to WASD only
+        // Using direct key input for WASD movement
         float horizontal = 0f;
         float vertical = 0f;
         
@@ -149,7 +145,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.W)) vertical += 1f;
         if (Input.GetKey(KeyCode.S)) vertical -= 1f;
         
-        // Get camera directions adjusted for gravity orientation
+        // Convert camera-relative input to world-space direction based on current gravity orientation
         Vector3 cameraForward = Camera.main.transform.forward;
         Vector3 cameraRight = Camera.main.transform.right;
         
@@ -209,7 +205,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!_isGrounded)
         {
-            // Standard gravity acceleration
+            // Apply standard gravity acceleration in the current gravity direction
             _rb.AddForce(_gravityDirection * 9.81f, ForceMode.Acceleration);
         }
     }
@@ -218,7 +214,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 targetVelocity = _moveDirection * moveSpeed;
         
-        // Preserve velocity in gravity direction
+        // Preserve velocity in gravity direction to maintain jump/fall physics
         float gravityVelocity = Vector3.Dot(_rb.velocity, _gravityDirection);
         Vector3 gravityComponent = _gravityDirection * gravityVelocity;
         
