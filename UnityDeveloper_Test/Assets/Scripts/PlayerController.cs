@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayers;
     public float groundCheckDistance = 0.2f;
     
+    [Header("Fall Detection")]
+    public float maxFallTime = 5f;  // Maximum time player can fall before game over
+    
     [Header("References")]
     public Transform modelTransform;
     
@@ -48,15 +51,43 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         CheckGrounded();
-        HandleMovementInput();
-        HandleGravityInput();
+        CheckFallDuration();
         
-        if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
+        // Only process input if gameplay is active
+        if (IsGameplayActive())
         {
-            Jump();
+            HandleMovementInput();
+            HandleGravityInput();
+            
+            if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
+            {
+                Jump();
+            }
+        }
+        else
+        {
+            // If gameplay is not active, set move direction to zero
+            _moveDirection = Vector3.zero;
         }
         
         UpdateAnimator();
+    }
+    
+    private void CheckFallDuration()
+    {
+        // Only check for extended falls if the game is active
+        if (IsGameplayActive() && !_isGrounded)
+        {
+            // Check if player has been falling for too long
+            if (_timeSinceLastGrounded > maxFallTime)
+            {
+                // Trigger game over
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.GameOver("You fell into the void!");
+                }
+            }
+        }
     }
     
     private void UpdateAnimator()
@@ -70,8 +101,24 @@ public class PlayerController : MonoBehaviour
     
     private void FixedUpdate()
     {
-        Move();
-        ApplyGravity();
+        // Only move and apply gravity if gameplay is active
+        if (IsGameplayActive())
+        {
+            Move();
+            ApplyGravity();
+        }
+        else
+        {
+            // If gameplay is not active, stop all movement
+            _rb.velocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+        }
+    }
+    
+    // Helper method to check if gameplay is active
+    private bool IsGameplayActive()
+    {
+        return GameManager.Instance != null && GameManager.Instance.IsGameplayActive;
     }
     
     private void CheckGrounded()
