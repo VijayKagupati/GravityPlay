@@ -1,92 +1,123 @@
-# UnityDeveloperTest
+![gravity-play-banner](https://github.com/user-attachments/assets/5f247202-3f23-4e3e-a7f9-de9c180be7ac)
+
+# GravityPlay
+
+Welcome to **GravityPlay**, a thrilling and innovative gravity manipulation puzzle game built using Unity. In this game, players navigate through a challenging environment, collecting cubes while mastering the art of gravity manipulation. With a unique blend of physics-based gameplay, immersive animations, and a ticking timer, GravityPlay offers an engaging experience that tests skill and strategy.
+
+---
+
+## 🎮 Features
+
+### 📦 Cube Collection
+- The game's core objective is to collect all the cubes scattered across the environment.
+- Players must use their wits, reflexes, and gravity manipulation skills to succeed.
+  ![image](https://github.com/user-attachments/assets/048b95c5-a63e-4fd9-9a3f-d0ba73c0ab91)
 
 
+### 🕹️ Character Movement
+- Smooth and responsive character controls using:
+  - **W, A, S, D keys** for movement.
+  - **Space key** for jumping.
 
-## Getting started
+### 🌌 Gravity Manipulation
+- Use the arrow keys to preview the direction of gravity manipulation through a hologram.
+- Adjust gravity in the desired direction by pressing the **Enter key**.
+- A unique mechanic that adds a layer of strategy and excitement.
+![image](https://github.com/user-attachments/assets/32dc77bf-2f70-47f9-a029-2c88960175db)
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### 🎥 Third-Person Camera
+- A dynamic third-person camera setup ensures an optimal view of the character and the surroundings.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+### ⏱️ Timer
+- A 2-minute countdown timer adds urgency and intensity to the gameplay.
+- Collect all cubes before the timer runs out to win.
 
-## Add your files
+### 🚨 Game Over Conditions
+- The game ends when:
+  - The player fails to collect all cubes within the time limit.
+  - The player falls freely without contact with any surface.
+![image](https://github.com/user-attachments/assets/c35c8894-149d-4e9e-97d0-81f178018173)
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### 💃 Animations
+- Seamlessly integrated animations bring the character and environment to life.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/chinmaygawande/unitydevelopertest.git
-git branch -M main
-git push -uf origin main
-```
+### 🖥️ Standalone Builds
+- Fully functional builds for **Windows** and **Mac** platforms.
 
-## Integrate with your tools
+### 🧹 Clean Codebase
+- Well-optimised, structured, and documented code adhering to best practices.
 
-- [ ] [Set up project integrations](https://gitlab.com/chinmaygawande/unitydevelopertest/-/settings/integrations)
+---
 
-## Collaborate with your team
+## 🛠️ Development Highlights
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+GravityPlay was developed as part of an internship assignment for **ParodyStudios**. The task involved creating a gravity manipulation puzzle game by cloning a base project with pre-provided assets, characters, animations, and materials. This project emphasises programming, gameplay mechanics, and user experience over artistic creation.
 
-## Test and Deploy
+### Objective
+The main goal was to create a puzzle game where players manipulate gravity to collect all cubes within a 2-minute time limit. The development implemented key features such as character movement, gravity manipulation, camera setup, animations, and game-over conditions.
 
-Use the built-in continuous integration in GitLab.
+---
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## 🚀 Installation and Usage
 
-***
+1. **Download the Standalone Build**  
+   Grab the latest build for your platform:
+   - [Windows Build](#) (Link to the Windows executable)
+   - [Mac Build](#) (Link to the Mac application)
 
-# Editing this README
+2. **Run the Game**  
+   - Extract the downloaded file.
+   - Launch the executable and dive into the world of GravityPlay.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+---
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## 💡 Controls
 
-## Name
-Choose a self-explaining name for your project.
+| Action               | Key(s)       |
+|-----------------------|--------------|
+| Move                 | W, A, S, D   |
+| Jump                 | Space        |
+| Preview Gravity      | Arrow Keys   |
+| Manipulate Gravity   | Enter        |
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+---
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## 🖌️ Assets and Acknowledgements
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+This game was developed using assets provided in the base project. Special thanks to the creators of the assets, characters, and animations that made this game possible.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+---
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## 📂 Repository and Development Process
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+The complete project, including all code and assets, is shared [here on GitHub](#). All code changes were committed regularly with meaningful commit messages to maintain a clean and organized workflow.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+---
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+## 🌟 About the Developer
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+GravityPlay was developed by **Vijay Kagupati** as a part of an internship at ParodyStudios. The project showcases expertise in Unity game development, physics-based gameplay mechanics, and clean coding practices.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+---
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## 🕹️ Gameplay Video
 
-## License
-For open source projects, say how it is licensed.
+Check out the gameplay video for GravityPlay [here](https://drive.google.com/file/d/1QODvkdvWl2zjir_onKP22bxVeBcGunMR/view?usp=drive_link).
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+---
+
+## 🧑‍💻 Contributing
+
+Contributions are welcome! Feel free to fork the repository and submit pull requests to improve the game.
+
+---
+
+## 📧 Contact
+
+For any questions or feedback, feel free to reach out:
+- **Linkedin**: [@VijayKagupati](https://www.linkedin.com/in/vijaykagupati/)
+- **GitHub**: [VijayKagupati](https://github.com/VijayKagupati)
+
+---
+
+Enjoy playing GravityPlay, and don't forget to challenge your friends to beat your best time! 🎉
